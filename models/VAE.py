@@ -17,7 +17,7 @@ from utils.distributions import log_Bernoulli, log_Normal_diag, log_Normal_stand
 from utils.visual_evaluation import plot_histogram
 from utils.nn import he_init, GatedDense, NonLinear
 
-from Model import Model
+from models.Model import Model
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 #=======================================================================================================================
@@ -27,7 +27,7 @@ class VAE(Model):
 
         # encoder: q(z | x)
         self.q_z_layers = nn.Sequential(
-            GatedDense(np.prod(self.args.input_size), 300),
+            GatedDense(int(np.prod(self.args.input_size)), 300),
             GatedDense(300, 300)
         )
 
@@ -41,10 +41,10 @@ class VAE(Model):
         )
 
         if self.args.input_type == 'binary':
-            self.p_x_mean = NonLinear(300, np.prod(self.args.input_size), activation=nn.Sigmoid())
+            self.p_x_mean = NonLinear(300, int(np.prod(self.args.input_size)), activation=nn.Sigmoid())
         elif self.args.input_type == 'gray' or self.args.input_type == 'continuous':
-            self.p_x_mean = NonLinear(300, np.prod(self.args.input_size), activation=nn.Sigmoid())
-            self.p_x_logvar = NonLinear(300, np.prod(self.args.input_size), activation=nn.Hardtanh(min_val=-4.5,max_val=0))
+            self.p_x_mean = NonLinear(300, int(np.prod(self.args.input_size)), activation=nn.Sigmoid())
+            self.p_x_logvar = NonLinear(300, int(np.prod(self.args.input_size)), activation=nn.Hardtanh(min_val=-4.5,max_val=0))
 
         # weights initialization
         for m in self.modules():
@@ -137,7 +137,7 @@ class VAE(Model):
         I = int(math.ceil(X_full.size(0) / MB))
 
         for i in range(I):
-            x = X_full[i * MB: (i + 1) * MB].view(-1, np.prod(self.args.input_size))
+            x = X_full[i * MB: (i + 1) * MB].view(-1, int(np.prod(self.args.input_size)))
 
             loss, RE, KL = self.calculate_loss(x,average=True)
 

@@ -22,7 +22,7 @@ class Model(nn.Module):
 
         nonlinearity = nn.Hardtanh(min_val=0.0, max_val=1.0)
 
-        self.means = NonLinear(self.args.number_components, np.prod(self.args.input_size), bias=False, activation=nonlinearity)
+        self.means = NonLinear(self.args.number_components, int(np.prod(self.args.input_size)), bias=False, activation=nonlinearity)
 
         # init pseudo-inputs
         if self.args.use_training_data_init:
