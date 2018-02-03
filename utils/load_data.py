@@ -333,7 +333,7 @@ def load_cifar10(args, **kwargs):
     ])
 
     # load main train dataset
-    training_dataset = datasets.CIFAR10('datasets/Cifar10/', train=True, download=True, transform=transform)
+    training_dataset = datasets.CIFAR10('../data/', train=True, download=True, transform=transform)
     train_data = training_dataset.train_data / 255.
     train_data = np.swapaxes( np.swapaxes(train_data,1,2), 1, 3)
     train_data = np.reshape(train_data, (-1, np.prod(args.input_size)) )
@@ -355,7 +355,7 @@ def load_cifar10(args, **kwargs):
     val_loader = data_utils.DataLoader(validation, batch_size=args.test_batch_size, shuffle=False, **kwargs)
 
     # test loader
-    test_dataset = datasets.CIFAR10('datasets/Cifar10/', train=False, transform=transform )
+    test_dataset = datasets.CIFAR10('../data/', train=False, transform=transform )
     test_data = test_dataset.test_data / 255.
     test_data = np.swapaxes( np.swapaxes(test_data,1,2), 1, 3)
     x_test = np.reshape(test_data, (-1, np.prod(args.input_size)) )
