@@ -44,11 +44,11 @@ class VAE(nn.Module):
     def __init__(self):
         super(VAE, self).__init__()
 
-        self.fc1 = nn.Linear(32 * 32 * 3, 400)
-        self.fc21 = nn.Linear(400, 20)
-        self.fc22 = nn.Linear(400, 20)
-        self.fc3 = nn.Linear(20, 400)
-        self.fc4 = nn.Linear(400, 32 * 32 * 3)
+        self.fc1 = nn.Linear(32 * 32 * 3, 1024)
+        self.fc21 = nn.Linear(1024, 256)
+        self.fc22 = nn.Linear(1024, 256)
+        self.fc3 = nn.Linear(256, 1024)
+        self.fc4 = nn.Linear(1024, 32 * 32 * 3)
 
         self.relu = nn.ReLU()
         self.sigmoid = nn.Sigmoid()
