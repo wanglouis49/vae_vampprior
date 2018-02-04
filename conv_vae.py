@@ -111,7 +111,8 @@ optimizer = optim.RMSprop(model.parameters(), lr=1e-3)
 
 # Reconstruction + KL divergence losses summed over all elements and batch
 def loss_function(recon_x, x, mu, logvar):
-    BCE = F.binary_cross_entropy(recon_x, x.view(-1, 32 * 32 * 3), size_average=False)
+    BCE = F.binary_cross_entropy(recon_x.view(-1, 32 * 32 * 3),
+                                 x.view(-1, 32 * 32 * 3), size_average=False)
 
     # see Appendix B from VAE paper:
     # Kingma and Welling. Auto-Encoding Variational Bayes. ICLR, 2014
@@ -157,7 +158,7 @@ def test(epoch):
         if i == 0:
             n = min(data.size(0), 8)
             comparison = torch.cat([data[:n],
-                                   recon_batch.view(args.batch_size, 3, 32, 32)[:n]])
+                                   recon_batch[:n]])
             save_image(comparison.data.cpu(),
                        'snapshots/conv_vae/reconstruction_' + str(epoch) + '.png', nrow=n)
 
