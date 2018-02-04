@@ -10,3 +10,14 @@ RE: 14338.14
 KL: 110.57
 -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 
+Namespace(MB=100, S=5000, activation=None, batch_size=100, cuda=True, dataset_name='cifar10', dynamic_binarization=False, early_stopping_epochs=50, epochs=2000, input_size=[3, 32, 32], input_type='continuous', lr=0.0005, model_name='vae', model_signature='2018-02-03 19:43:42', no_cuda=False, number_components=500, prior='vampprior', pseudoinputs_mean=0.4, pseudoinputs_std=0.05, seed=14, test_batch_size=100, use_training_data_init=False, warmup=100, z1_size=40, z2_size=40)
+FINAL EVALUATION ON TEST SET
+LogL (TEST): 13835.62
+LogL (TRAIN): 0.00
+ELBO (TEST): 13929.70
+ELBO (TRAIN): 13703.26
+Loss: 13929.42
+RE: 13805.49
+KL: 123.93
+-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+
