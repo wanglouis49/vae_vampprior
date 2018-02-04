@@ -64,13 +64,13 @@ class VAE(nn.Module):
         self.deconv1 = nn.ConvTranspose2d(32, 32, kernel_size=3, stride=1, padding=1)
         self.deconv2 = nn.ConvTranspose2d(32, 32, kernel_size=3, stride=1, padding=1)
         self.deconv3 = nn.ConvTranspose2d(32, 32, kernel_size=2, stride=2, padding=0)
-        self.conv4 = nn.Conv2d(32, 3, kernel_size=3, stride=1, padding=1)
+        self.conv5 = nn.Conv2d(32, 3, kernel_size=3, stride=1, padding=1)
 
         self.relu = nn.ReLU()
         self.sigmoid = nn.Sigmoid()
 
     def encode(self, x):
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         out = self.relu(self.conv1(x))
         out = self.relu(self.conv2(out))
         out = self.relu(self.conv3(out))
@@ -94,7 +94,7 @@ class VAE(nn.Module):
         out = self.relu(self.deconv1(out))
         out = self.relu(self.deconv2(out))
         out = self.relu(self.deconv3(out))
-        out = self.sigmoid(self.conv4(out))
+        out = self.sigmoid(self.conv5(out))
         return out
 
     def forward(self, x):
