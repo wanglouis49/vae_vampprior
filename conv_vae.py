@@ -22,6 +22,8 @@ parser.add_argument('--log-interval', type=int, default=10, metavar='N',
                     help='how many batches to wait before logging training status')
 parser.add_argument('--hidden-size', type=int, default=20, metavar='N',
                     help='how big is z')
+parser.add_argument('--intermediate-size', type=int, default=128, metavar='N',
+                    help='how big is linear around z')
 # parser.add_argument('--widen-factor', type=int, default=1, metavar='N',
 #                     help='how wide is the model')
 args = parser.parse_args()
@@ -52,15 +54,15 @@ class VAE(nn.Module):
         self.conv2 = nn.Conv2d(3, 32, kernel_size=2, stride=2, padding=0)
         self.conv3 = nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1)
         self.conv4 = nn.Conv2d(32, 32, kernel_size=3, stride=1, padding=1)
-        self.fc1 = nn.Linear(16 * 16 * 32, 128)
+        self.fc1 = nn.Linear(16 * 16 * 32, args.intermediate_size)
 
         # Latent space
-        self.fc21 = nn.Linear(128, args.hidden_size)
-        self.fc22 = nn.Linear(128, args.hidden_size)
+        self.fc21 = nn.Linear(args.intermediate_size, args.hidden_size)
+        self.fc22 = nn.Linear(args.intermediate_size, args.hidden_size)
 
         # Decoder
-        self.fc3 = nn.Linear(args.hidden_size, 128)
-        self.fc4 = nn.Linear(128, 8192)
+        self.fc3 = nn.Linear(args.hidden_size, args.intermediate_size)
+        self.fc4 = nn.Linear(args.intermediate_size, 8192)
         self.deconv1 = nn.ConvTranspose2d(32, 32, kernel_size=3, stride=1, padding=1)
         self.deconv2 = nn.ConvTranspose2d(32, 32, kernel_size=3, stride=1, padding=1)
         self.deconv3 = nn.ConvTranspose2d(32, 32, kernel_size=2, stride=2, padding=0)
