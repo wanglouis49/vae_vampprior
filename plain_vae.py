@@ -20,8 +20,11 @@ parser.add_argument('--seed', type=int, default=1, metavar='S',
                     help='random seed (default: 1)')
 parser.add_argument('--log-interval', type=int, default=10, metavar='N',
                     help='how many batches to wait before logging training status')
+parser.add_argument('--hidden-size', type=int, default=20, metavar='N',
+                    help='how big is z')
+parser.add_argument('--widen-factor', type=int, default=1, metavar='N',
+                    help='how wide is the model')
 args = parser.parse_args()
-
 args.cuda = not args.no_cuda and torch.cuda.is_available()
 
 
@@ -44,11 +47,11 @@ class VAE(nn.Module):
     def __init__(self):
         super(VAE, self).__init__()
 
-        self.fc1 = nn.Linear(32 * 32 * 3, 1024)
-        self.fc21 = nn.Linear(1024, 256)
-        self.fc22 = nn.Linear(1024, 256)
-        self.fc3 = nn.Linear(256, 1024)
-        self.fc4 = nn.Linear(1024, 32 * 32 * 3)
+        self.fc1 = nn.Linear(32 * 32 * 3, 400 * args.widen_factor)
+        self.fc21 = nn.Linear(400 * args.widen_factor, args.hidden_size)
+        self.fc22 = nn.Linear(400 * args.widen_factor, args.hidden_size)
+        self.fc3 = nn.Linear(args.hidden_size, 400 * args.widen_factor)
+        self.fc4 = nn.Linear(400 * args.widen_factor, 32 * 32 * 3)
 
         self.relu = nn.ReLU()
         self.sigmoid = nn.Sigmoid()
@@ -140,7 +143,7 @@ def test(epoch):
 for epoch in range(1, args.epochs + 1):
     train(epoch)
     test(epoch)
-    sample = Variable(torch.randn(64, 20))
+    sample = Variable(torch.randn(64, args.hidden_size))
     if args.cuda:
         sample = sample.cuda()
     sample = model.decode(sample).cpu()
