@@ -70,6 +70,7 @@ class VAE(nn.Module):
         self.sigmoid = nn.Sigmoid()
 
     def encode(self, x):
+        import pdb; pdb.set_trace()
         out = self.relu(self.conv1(x))
         out = self.relu(self.conv2(out))
         out = self.relu(self.conv3(out))
