@@ -42,7 +42,7 @@ train_loader = torch.utils.data.DataLoader(
     batch_size=args.batch_size, shuffle=True, **kwargs)
 test_loader = torch.utils.data.DataLoader(
     datasets.CIFAR10('../data', train=False, transform=transforms.ToTensor()),
-    batch_size=args.batch_size, shuffle=True, **kwargs)
+    batch_size=args.batch_size, shuffle=False, **kwargs)
 
 
 class VAE(nn.Module):
@@ -157,12 +157,13 @@ def test(epoch):
         data = Variable(data, volatile=True)
         recon_batch, mu, logvar = model(data)
         test_loss += loss_function(recon_batch, data, mu, logvar).data[0]
-        if i == 0:
+        if epoch == args.epochs and i == 0:
             n = min(data.size(0), 8)
             comparison = torch.cat([data[:n],
                                    recon_batch[:n]])
             save_image(comparison.data.cpu(),
-                       'snapshots/conv_vae/reconstruction_' + str(epoch) + '.png', nrow=n)
+                       'snapshots/conv_vae/reconstruction_' + str(epoch) +
+                       '.png', nrow=n)
 
     test_loss /= len(test_loader.dataset)
     print('====> Test set loss: {:.4f}'.format(test_loss))
@@ -171,9 +172,10 @@ def test(epoch):
 for epoch in range(1, args.epochs + 1):
     train(epoch)
     test(epoch)
-    sample = Variable(torch.randn(64, args.hidden_size))
-    if args.cuda:
-        sample = sample.cuda()
-    sample = model.decode(sample).cpu()
-    save_image(sample.data.view(64, 3, 32, 32),
-               'snapshots/conv_vae/sample_' + str(epoch) + '.png')
+    if epoch == args.epochs:
+        sample = Variable(torch.randn(64, args.hidden_size))
+        if args.cuda:
+            sample = sample.cuda()
+        sample = model.decode(sample).cpu()
+        save_image(sample.data.view(64, 3, 32, 32),
+                   'snapshots/conv_vae/sample_' + str(epoch) + '.png')
